@@ -1,0 +1,166 @@
+VPS / Linux Server (BEST & Professional)
+
+Works on **DigitalOcean / AWS / Contabo / Hetzner / local VPS**
+
+---
+
+## 1️⃣ Server Requirements
+
+* Ubuntu 20.04 / 22.04
+* Public IP
+* SSH access
+
+---
+
+## 2️⃣ Login to Server
+
+```bash
+ssh root@YOUR_SERVER_IP
+```
+
+---
+
+## 3️⃣ Install System Packages
+
+```bash
+apt update && apt upgrade -y
+apt install python3 python3-pip python3-venv nginx -y
+```
+
+---
+
+## 4️⃣ Upload Your Flask App
+
+On your **local PC**:
+
+```bash
+scp app.py root@YOUR_SERVER_IP:/var/www/sms_app/
+```
+
+On **server**:
+
+```bash
+cd /var/www
+mkdir sms_app
+cd sms_app
+```
+
+---
+
+## 5️⃣ Create Virtual Environment
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install flask requests gunicorn
+```
+
+---
+
+## 6️⃣ Update Flask App (IMPORTANT)
+
+Change:
+
+```python
+app.run(debug=True)
+```
+
+To:
+
+```python
+app.run()
+```
+
+(we’ll use Gunicorn, not Flask’s dev server)
+
+---
+
+## 7️⃣ Test Locally on Server
+
+```bash
+source venv/bin/activate
+python app.py
+```
+
+Visit:
+
+```
+http://YOUR_SERVER_IP:5000
+```
+
+If this works → proceed.
+
+---
+
+## 8️⃣ Run Flask with Gunicorn (Production Server)
+
+```bash
+gunicorn -w 3 -b 127.0.0.1:8000 app:app
+```
+
+If your file name is `app.py`, this is correct.
+
+---
+
+## 9️⃣ Configure Nginx (Reverse Proxy)
+
+```bash
+nano /etc/nginx/sites-available/sms_app
+```
+
+Paste:
+
+```nginx
+server {
+    listen 80;
+    server_name YOUR_DOMAIN_OR_IP;
+
+    location / {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+```
+
+Enable site:
+
+```bash
+ln -s /etc/nginx/sites-available/sms_app /etc/nginx/sites-enabled
+nginx -t
+systemctl restart nginx
+```
+
+🎉 Now open:
+
+```
+http://YOUR_DOMAIN_OR_IP
+```
+
+Your Flask app is LIVE 🔥
+
+---
+
+## 🔐 (Optional but Recommended) Add HTTPS
+
+```bash
+apt install certbot python3-certbot-nginx -y
+certbot --nginx -d yourdomain.com
+```
+
+---
+
+# 🌍 OPTION 2: Shared Hosting (cPanel) – Simple
+
+If your hosting supports **Python / WSGI**:
+
+### Steps:
+
+1. cPanel → **Setup Python App**
+2. Select Python 3.10+
+3. Upload `app.py`
+4. Set startup file: `app.py`
+5. Set application entry point: `app`
+6. Install dependencies: `flask`, `requests`
+7. Restart app
+
