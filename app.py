@@ -294,7 +294,7 @@ def send_sms():
     if response.status_code == 200:
         return jsonify({"message": "✅ SMS sent successfully"})
     else:
-        return jsonify({"message": "❌ SMS sending failed"}), 400
+        return jsonify({"message": response}), 400
 
 # ===============================
 # RUN APP
