@@ -296,6 +296,10 @@ def send_sms():
     else:
         return jsonify({"message": response}), 400
 
+@app.route('/test', methods=["GET"])
+def test_func():
+    return jsonify({"message": "Hello Render World!"}), 400
+
 # ===============================
 # RUN APP
 # ===============================
