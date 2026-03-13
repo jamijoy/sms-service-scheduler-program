@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a3fd8fca-9442-4717-bbf0-ef218fd2d59d" name="Changes" comment="" />
+    <list default="true" id="a3fd8fca-9442-4717-bbf0-ef218fd2d59d" name="Changes" comment="requirement and Procfile introduce for render run">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -74,7 +77,7 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="1052562b-7c97-4e56-b1e0-4511b3af715e" name="Changes" comment="" />
+      <changelist id="a3fd8fca-9442-4717-bbf0-ef218fd2d59d" name="Changes" comment="requirement and Procfile introduce for render run" />
       <created>1770820397363</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -86,6 +89,7 @@
       <workItem from="1771610485122" duration="2374000" />
       <workItem from="1773250846889" duration="939000" />
       <workItem from="1773341475310" duration="1022000" />
+      <workItem from="1773424050410" duration="1937000" />
     </task>
     <task id="LOCAL-00001" summary="requirement and Procfile introduce for render run">
       <created>1773341520536</created>
