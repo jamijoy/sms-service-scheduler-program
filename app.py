@@ -337,6 +337,23 @@ def save_contact_form():
     return jsonify({"message": "Data saved successfully at " + datetime.now().strftime("%Y-%m-%d %H:%M:%S")})
 
 
+@app.route('/show-saved-contact-message', methods=["GET"])
+def show_saved_feedbacks():
+
+    # Step 1: Read existing data
+    if os.path.exists(FILE_PATH):
+        with open(FILE_PATH, "r") as file:
+            try:
+                existing_data = json.load(file)
+            except json.JSONDecodeError:
+                existing_data = []
+    else:
+        existing_data = []
+
+    return jsonify({"Saved Data": existing_data})
+
+
+
 # ===============================
 # RUN APP
 # ===============================
