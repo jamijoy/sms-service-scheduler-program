@@ -1,5 +1,8 @@
 from flask import Flask, request, jsonify, render_template_string
+from datetime import datetime
 import requests
+import json
+import os
 
 app = Flask(__name__)
 
@@ -10,6 +13,7 @@ AUTH_URL = "https://lsg-sms-stage.land.gov.bd/api/v1/token"
 SMS_URL = "https://lsg-sms-stage.land.gov.bd/api/v1/lsgsms"
 USERNAME = "ldtax@lsg-stage"
 PASSWORD = "9^3~!I78TF"
+FILE_PATH = "data-contact-form.json"
 
 # ===============================
 # HTML SINGLE PAGE UI
@@ -299,6 +303,39 @@ def send_sms():
 @app.route('/test', methods=["GET"])
 def test_func():
     return jsonify({"message": "Hello Render World!"}), 400
+
+@app.route('/save-contact-form', methods=["POST"])
+def save_contact_form():
+
+    data = request.json
+
+    new_entry = {
+        "name": data.get("name"),
+        "email": data.get("email"),
+        "subject": data.get("subject"),
+        "message": data.get("message"),
+        "created_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    }
+
+    # Step 1: Read existing data
+    if os.path.exists(FILE_PATH):
+        with open(FILE_PATH, "r") as file:
+            try:
+                existing_data = json.load(file)
+            except json.JSONDecodeError:
+                existing_data = []
+    else:
+        existing_data = []
+
+    # Step 2: Append new data
+    existing_data.append(new_entry)
+
+    # Step 3: Save back to file
+    with open(FILE_PATH, "w") as file:
+        json.dump(existing_data, file, indent=4)
+
+    return jsonify({"message": "Data saved successfully at " + datetime.now().strftime("%Y-%m-%d %H:%M:%S")})
+
 
 # ===============================
 # RUN APP
