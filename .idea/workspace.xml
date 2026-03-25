@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a3fd8fca-9442-4717-bbf0-ef218fd2d59d" name="Changes" comment="git ignore added .idea">
-      <change afterPath="$PROJECT_DIR$/data-contact-form.json" afterDir="false" />
+    <list default="true" id="a3fd8fca-9442-4717-bbf0-ef218fd2d59d" name="Changes" comment="save-contact-form">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
     </list>
@@ -99,7 +98,14 @@
       <option name="project" value="LOCAL" />
       <updated>1773341520536</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="save-contact-form">
+      <created>1774465603649</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1774465603649</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -118,7 +124,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="requirement and Procfile introduce for render run" />
-    <option name="LAST_COMMIT_MESSAGE" value="requirement and Procfile introduce for render run" />
+    <MESSAGE value="save-contact-form" />
+    <option name="LAST_COMMIT_MESSAGE" value="save-contact-form" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/py_sms_app$app.coverage" NAME="app Coverage Results" MODIFIED="1771272155398" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
