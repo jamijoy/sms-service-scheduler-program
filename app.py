@@ -1,10 +1,12 @@
 from flask import Flask, request, jsonify, render_template_string
+from flask_cors import CORS
 from datetime import datetime
 import requests
 import json
 import os
 
 app = Flask(__name__)
+CORS(app)  # allow all origins
 
 # ===============================
 # CONFIGURATION (CHANGE THESE)
