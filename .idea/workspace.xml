@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a3fd8fca-9442-4717-bbf0-ef218fd2d59d" name="Changes" comment="save-contact-form">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -201,6 +203,7 @@
       <workItem from="1773424050410" duration="1937000" />
       <workItem from="1774805718368" duration="365000" />
       <workItem from="1775409673696" duration="558000" />
+      <workItem from="1775497518648" duration="302000" />
     </task>
     <task id="LOCAL-00001" summary="requirement and Procfile introduce for render run">
       <created>1773341520536</created>
