@@ -233,12 +233,72 @@ function sendSMS() {
 </html>
 """
 
+# Small built-in test page so you can try the endpoint without Postman
+TEST_PAGE = """
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sales Prediction Tester</title>
+  <style>
+    body { font-family: sans-serif; max-width: 700px; margin: 40px auto; }
+    textarea { width: 100%; height: 160px; font-family: monospace; }
+    button { padding: 8px 16px; margin-top: 10px; cursor: pointer; }
+    pre { background: #f4f4f4; padding: 12px; overflow-x: auto; }
+  </style>
+</head>
+<body>
+  <h2>Sales Prediction Tester</h2>
+  <p>Edit the JSON below and click Predict.</p>
+  <textarea id="input">{
+  "historical_data": [
+    {"date": "2026-06-01", "sales": 1000},
+    {"date": "2026-06-02", "sales": 1050},
+    {"date": "2026-06-03", "sales": 1020},
+    {"date": "2026-06-04", "sales": 1100},
+    {"date": "2026-06-05", "sales": 1180},
+    {"date": "2026-06-06", "sales": 1150},
+    {"date": "2026-06-07", "sales": 1220}
+  ],
+  "periods_ahead": 7,
+  "method": "linear"
+}</textarea>
+  <br>
+  <button onclick="runPredict()">Predict</button>
+  <h3>Result</h3>
+  <pre id="output">(no result yet)</pre>
+ 
+  <script>
+    async function runPredict() {
+      const out = document.getElementById('output');
+      out.textContent = 'Loading...';
+      try {
+        const body = JSON.parse(document.getElementById('input').value);
+        const res = await fetch('/api/predict-sales', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+        const data = await res.json();
+        out.textContent = JSON.stringify(data, null, 2);
+      } catch (e) {
+        out.textContent = 'Error: ' + e.message;
+      }
+    }
+  </script>
+</body>
+</html>
+"""
+
 # ===============================
 # API FUNCTIONS
 # ===============================
 @app.route("/")
 def home():
     return render_template_string(HTML_PAGE)
+
+@app.route("/test-page", methods=["GET"])
+def index():
+    return render_template_string(TEST_PAGE)
 
 # ===============================
 # ROUTES
