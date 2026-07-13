@@ -416,6 +416,116 @@ def show_saved_feedbacks():
     return jsonify({"Saved Data": existing_data})
 
 
+def _parse_date(value):
+    """Accepts 'YYYY-MM-DD' strings or datetime objects."""
+    if isinstance(value, datetime):
+        return value
+    return datetime.strptime(value, "%Y-%m-%d")
+
+
+def predict_sales(historical_data, periods_ahead=7, method="linear"):
+    """
+    historical_data: list of {"date": "YYYY-MM-DD", "sales": number}, sorted or not.
+    periods_ahead: how many future periods (days) to predict.
+    method: "linear" (trend line) or "moving_average" (last-N average, flat forecast).
+
+    Returns a dict with historical echo, predictions, and basic model info.
+    """
+    if not historical_data or len(historical_data) < 2:
+        raise ValueError("Need at least 2 historical data points to predict.")
+
+    # Sort by date and pull out arrays
+    rows = sorted(historical_data, key=lambda r: _parse_date(r["date"]))
+    dates = [_parse_date(r["date"]) for r in rows]
+    sales = np.array([float(r["sales"]) for r in rows])
+
+    # Use day-offsets from the first date as the x-axis so gaps in dates are handled correctly
+    x = np.array([(d - dates[0]).days for d in dates], dtype=float)
+
+    last_date = dates[-1]
+    future_offsets = np.array([
+        (last_date - dates[0]).days + i
+        for i in range(1, periods_ahead + 1)
+    ], dtype=float)
+    future_dates = [last_date + timedelta(days=i) for i in range(1, periods_ahead + 1)]
+
+    if method == "moving_average":
+        window = min(7, len(sales))
+        avg = float(np.mean(sales[-window:]))
+        predictions = [avg] * periods_ahead
+        model_info = {"method": "moving_average", "window": window}
+
+    else:  # linear regression trend
+        # degree-1 polyfit: sales = slope * x + intercept
+        slope, intercept = np.polyfit(x, sales, 1)
+        predictions = (slope * future_offsets + intercept).tolist()
+        # never predict negative sales
+        predictions = [max(0, round(p, 2)) for p in predictions]
+
+        # simple R^2 for a sense of fit quality
+        fitted = slope * x + intercept
+        ss_res = float(np.sum((sales - fitted) ** 2))
+        ss_tot = float(np.sum((sales - np.mean(sales)) ** 2))
+        r_squared = 1 - ss_res / ss_tot if ss_tot > 0 else 0.0
+
+        model_info = {
+            "method": "linear",
+            "slope_per_day": round(float(slope), 4),
+            "intercept": round(float(intercept), 4),
+            "r_squared": round(r_squared, 4),
+        }
+
+    return {
+        "historical": [
+            {"date": d.strftime("%Y-%m-%d"), "sales": float(s)}
+            for d, s in zip(dates, sales)
+        ],
+        "predictions": [
+            {"date": d.strftime("%Y-%m-%d"), "predicted_sales": round(p, 2)}
+            for d, p in zip(future_dates, predictions)
+        ],
+        "model_info": model_info,
+    }
+
+
+# ---------------------------------------------------------------------------
+# Routes
+# ---------------------------------------------------------------------------
+
+@app.route("/api/predict-sales", methods=["POST"])
+def api_predict_sales():
+    """
+    Expected JSON body:
+    {
+        "historical_data": [{"date": "2026-01-01", "sales": 1000}, ...],
+        "periods_ahead": 7,
+        "method": "linear"   # or "moving_average"
+    }
+    """
+    body = request.get_json(silent=True)
+    if not body or "historical_data" not in body:
+        return jsonify({"error": "Missing 'historical_data' in request body."}), 400
+
+    periods_ahead = int(body.get("periods_ahead", 7))
+    method = body.get("method", "linear")
+
+    if method not in ("linear", "moving_average"):
+        return jsonify({"error": "method must be 'linear' or 'moving_average'."}), 400
+
+    try:
+        result = predict_sales(body["historical_data"], periods_ahead, method)
+        return jsonify(result)
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
+    except Exception as e:
+        return jsonify({"error": f"Prediction failed: {str(e)}"}), 500
+
+
+@app.route("/api/health", methods=["GET"])
+def health():
+    return jsonify({"status": "ok", "time": datetime.utcnow().isoformat()})
+
+
 
 # ===============================
 # RUN APP
