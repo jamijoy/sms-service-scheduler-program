@@ -503,6 +503,8 @@ def api_predict_sales():
     }
     """
     body = request.get_json(silent=True)
+    return jsonify(body), 500         # test line
+
     if not body or "historical_data" not in body:
         return jsonify({"error": "Missing 'historical_data' in request body."}), 400
 
